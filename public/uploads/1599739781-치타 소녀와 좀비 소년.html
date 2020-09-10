@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+                            <html lang="en">
+                            <head>
+                                <meta charset="UTF-8">
+                                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                                <title>Document</title>
+                                <style>
+                                    .page {
+                                        position: relative;
+                                        overflow: hidden;
+                                        width: 1000px;
+                                        height: 800px;
+                                    }
+                                    .page__item {
+                                        position: absolute;
+                                        pointer-events: none;
+                                    }
+                            
+                                    .page__video {
+                                        position: relative;
+                                        background-color: #000;
+                                    }
+                                    .page__video video {
+                                        max-width: 100%;
+                                        max-height: 100%;
+                                    }
+                                    .page__video input {
+                                        position: absolute;
+                                        right: 1em; bottom: 1.5em;
+                                        width: calc(100% - 80px - 3em);
+                                    }
+                                    .page__video button {
+                                        position: absolute;
+                                        left: 1em; bottom: 1em;
+                                        background-color: #fff;
+                                        font-size: 0.9em;
+                                        text-align: center;
+                                        line-height: 40px;
+                                        width: 80px;
+                                        height: 40px;
+                                    }
+                                </style>
+                            </head>
+                            <body>
+                                <div class="page"><img id="item_1599531660419" src="file:///D:/_SKILL_CONTEST_/%23%202020%EB%85%84%20%EC%A0%84%EA%B5%AD%EB%8C%80%ED%9A%8C/%EB%AC%B8%EC%A0%9C%ED%92%80%EC%9D%B4/%EB%8C%80%EA%B5%AC/try2/B_Module/images/books/3.jpg" class="page__item" style="left: 317px; top: 143px;"></div><div class="page"><img id="item_1599531660419" src="file:///D:/_SKILL_CONTEST_/%23%202020%EB%85%84%20%EC%A0%84%EA%B5%AD%EB%8C%80%ED%9A%8C/%EB%AC%B8%EC%A0%9C%ED%92%80%EC%9D%B4/%EB%8C%80%EA%B5%AC/try2/B_Module/images/intro.jpg" class="page__item" style="left: 0px; top: 0px;"></div><div class="page"><div id="item_1599531660420" class="page__video" style="left: 0px; top: 0px;">
+                                    <video src="file:///D:/_SKILL_CONTEST_/%23%202020%EB%85%84%20%EC%A0%84%EA%B5%AD%EB%8C%80%ED%9A%8C/%EB%AC%B8%EC%A0%9C%ED%92%80%EC%9D%B4/%EB%8C%80%EA%B5%AC/try2/B_Module/video/ex.mp4"></video>
+                                    <input type="range" min="0" max="7" step="1" value="0">
+                                    <button>재생</button>
+                                </div><script>
+                                    (()=>{
+                                        let box = document.querySelector("#item_1599531660420");
+                                        if(!box) return;
+
+                                        let button = box.querySelector("button");
+                                        let input = box.querySelector("input");
+                                        let video = box.querySelector("video");
+                                        button.innerText = "재생";
+                                        video.pause();
+
+                                        video.addEventListener("timeupdate", e => {
+                                            input.value = parseInt(e.target.currentTime);
+                                        });
+
+                                        video.addEventListener("ended", e => {
+                                            video.pause();
+                                            input.value = 0;
+                                            button.innerText = "재생";
+                                        });
+
+                                        button.addEventListener("mousedown", e => {
+                                            e.stopPropagation();
+                                            if(video.paused){
+                                                video.play();
+                                                e.currentTarget.innerText = "일시정지";
+                                            } else {
+                                                video.pause();
+                                                e.currentTarget.innerText = "재생";
+                                            }
+                                        });
+
+                                        input.addEventListener("mousedown", e => {
+                                            e.stopPropagation();
+                                        });
+                                
+                                        input.addEventListener("input", e => {
+                                            video.currentTime = e.target.value;
+                                        });
+                                    })();
+                                </script></div>
+                            </body>
+                            </html>

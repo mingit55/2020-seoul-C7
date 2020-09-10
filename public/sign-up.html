@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>전주한지문화축제</title>
+    <script src="/js/jquery-3.4.1.min.js"></script>
+    <link rel="stylesheet" href="/bootstrap-4.3.1-dist/css/bootstrap.min.css">
+    <script src="/bootstrap-4.3.1-dist/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="/fontawesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <script src="/js/common.js"></script>
+</head>
+<body>
+    <input type="checkbox" id="open-aside" hidden>
+
+    <!-- 헤더 영역 -->
+    <header>
+        <div class="wrap d-between h-100">
+            <a href="#">
+                <img src="/images/logo.svg" alt="전주한지문화축제" title="전주한지문화축제" height="40">
+            </a>
+            <div class="nav d-none d-lg-flex position-center mt-2">
+                <div class="nav__item">
+                    <a href="#">전주한지문화축제</a>
+                    <div class="nav__list">
+                        <a href="#">개요/연혁</a>
+                        <a href="#">찾아오시는길</a>
+                    </div>
+                </div>
+                <div class="nav__item">
+                    <a href="#">한지상품판매관</a>
+                    <div class="nav__list">
+                        <a href="#">한지업체</a>
+                        <a href="#">온라인스토어</a>
+                    </div>
+                </div>
+                <div class="nav__item">
+                    <a href="#">한지공예대전</a>
+                    <div class="nav__list">
+                        <a href="#">출품신청</a>
+                        <a href="#">참가작품</a>
+                    </div>
+                </div>
+                <div class="nav__item">
+                    <a href="#">축제공지사항</a>
+                    <div class="nav__list">
+                        <a href="#">알려드립니다</a>
+                        <a href="#">1:1문의</a>
+                    </div>
+                </div>
+            </div>
+            <div class="nav__background"></div>
+            <div class="auth d-none d-lg-flex">
+                <a href="#">로그인</a>
+                <a href="#">회원가입</a>
+            </div>
+            <label for="open-aside" class="icon-bars d-lg-none">
+                <span></span>
+                <span></span>
+                <span></span>
+            </label>
+        </div>
+    </header>
+    <!-- /헤더 영역 -->
+
+    <aside class="d-lg-none">
+        <label for="open-aside" class="aside__background"></label>
+        <div class="aside__content">
+            <div class="auth auth--aside">
+                <a href="#">로그인</a>
+                <a href="#">회원가입</a>
+            </div>
+            <div class="nav nav--aside">
+                <div class="nav__item">
+                    <a href="#">전주한지문화축제</a>
+                    <div class="nav__list">
+                        <a href="#">개요/연혁</a>
+                        <a href="#">찾아오시는길</a>
+                    </div>
+                </div>
+                <div class="nav__item">
+                    <a href="#">한지상품판매관</a>
+                    <div class="nav__list">
+                        <a href="#">한지업체</a>
+                        <a href="#">온라인스토어</a>
+                    </div>
+                </div>
+                <div class="nav__item">
+                    <a href="#">한지공예대전</a>
+                    <div class="nav__list">
+                        <a href="#">출품신청</a>
+                        <a href="#">참가작품</a>
+                    </div>
+                </div>
+                <div class="nav__item">
+                    <a href="#">축제공지사항</a>
+                    <div class="nav__list">
+                        <a href="#">알려드립니다</a>
+                        <a href="#">1:1문의</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <div class="wrap position-relative hx-300">
+        <div class="background background--black">
+            <img src="/images/visual/2.jpg" alt="비주얼 이미지" title="비주얼 이미지">
+        </div>
+        <div class="position-center text-center">
+            <div class="fx-8 text-white mb-2 font-weight-lighter">회원가입</div>
+            <div class="text-gray fx-3">
+                사용자 계정
+                <i class="fa fa-angle-right mx-1"></i>
+                회원가입
+            </div>
+        </div>
+    </div>
+
+    <div class="container py-5">
+        <form action="/sign-up" method="post" enctype="multipart/form-data" id="sign-up">
+            <div class="form-group">
+                <label for="user_email">이메일</label>
+                <input type="text" id="user_email" class="form-control" name="user_email">
+                <div class="error text-red mt-2 fx-n2"></div>
+            </div>
+            <div class="form-group">
+                <label for="password">비밀번호</label>
+                <input type="password" id="password" class="form-control" name="password">
+                <div class="error text-red mt-2 fx-n2"></div>
+            </div>
+            <div class="form-group">
+                <label for="passconf">비밀번호 확인</label>
+                <input type="password" id="passconf" class="form-control" name="passconf">
+                <div class="error text-red mt-2 fx-n2"></div>
+            </div>
+            <div class="form-group">
+                <label for="user_name">이름</label>
+                <input type="text" id="user_name" class="form-control" name="user_name">
+                <div class="error text-red mt-2 fx-n2"></div>
+            </div>
+            <div class="form-group">
+                <label for="image">프로필 사진</label>
+                <input type="file" id="image" class="form-control" name="image" accept="image/*">
+                <div class="error text-red mt-2 fx-n2"></div>
+            </div>
+            <div class="form-group">
+                <label for="type">회원 유형</label>
+                <select name="type" id="type" class="form-control">
+                    <option value="normal">일반 회원</option>
+                    <option value="company">기업 회원</option>
+                </select>
+            </div>
+            <div class="form-group mt-3 text-right">
+                <button class="btn-custom">회원가입</button>
+            </div>
+        </form>
+    </div>
+
+    <script src="/js/sign-up.js"></script>
+
+    <!-- 푸터 -->
+    <footer class="bg-dark">
+        <div class="wrap pt-4">
+            <div class="row align-items-center">
+                <div class="col-lg-3">
+                    <div class="text-center">
+                        <a class="white" href="#">
+                            <img src="/images/logo.svg" alt="전주한지문화축제" title="전주한지문화축제" height="40">
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-6 my-4 my-lg-0">
+                    <div class="row d-center text-center h-100">
+                        <a href="#" class="col-md-3 fx-n1 text-gray mb-3 mb-md-0">전주한지문화축제</a>
+                        <a href="#" class="col-md-3 fx-n1 text-gray mb-3 mb-md-0">한지상품판매관</a>
+                        <a href="#" class="col-md-3 fx-n1 text-gray mb-3 mb-md-0">한지공예대전</a>
+                        <a href="#" class="col-md-3 fx-n1 text-gray mb-3 mb-md-0">축제공지사항</a>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="text-center text-white">
+                        <span class="icon">
+                            <i class="fa fa-facebook"></i>
+                        </span>
+                        <span class="icon">
+                            <i class="fa fa-twitter"></i>
+                        </span>
+                        <span class="icon">
+                            <i class="fa fa-google-plus"></i>
+                        </span>
+                    </div>
+                </div>
+            </div> 
+        </div>
+        <div class="text-center fx-n2 text-muted py-3 order-3 order-lg-0">
+            Copyright 2018 jhanji. All Right Reserved.
+        </div>
+    </footer>
+    <!-- /푸터 -->
+</body>
+</html>
