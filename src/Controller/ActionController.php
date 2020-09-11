@@ -204,4 +204,75 @@ class ActionController {
 
         go("/store", "총 {$totalCount}개의 한지가 구매되었습니다.");
     }
+
+    function updateInventory($id){
+        $item = DB::find("inventory", $id);
+        if(!$item || $item->uid !== user()->id) return;
+
+        checkEmpty();
+        extract($_POST);
+
+        DB::query("UPDATE inventory SET hasCount = ? WHERE id = ?", [$count, $id]);
+    }
+    
+    function deleteInventory($id){
+        $item = DB::find("inventory", $id);
+        if(!$item || $item->uid !== user()->id) return;
+
+        DB::query("DELETE FROM inventory WHERE id = ?", [$id]);
+    }
+
+    function insertArtwork(){
+        checkEmpty();
+        extract($_POST);
+
+        $filename = upload_base64($image);
+        DB::query("INSERT INTO artworks(uid, title, content, hash_tags, image) VALUES (?, ?, ?, ?, ?)", [user()->id, $title, $content, $hash_tags, $filename]);
+
+        go("/entry", "출품이 완료되었습니다.");
+    }
+
+    function updateArtwork($id){
+        $artwork = DB::find("artworks", $id);
+        if(!$artwork) back("대상을 찾을 수 없습니다.");
+        checkEmpty();
+        extract($_POST);
+
+        DB::query("UPDATE artworks SET title = ?, content = ?, hash_tags = ? WHERE id = ?", [$title, $content, $hash_tags, $id]);
+
+        go("/artworks/$id", "수정되었습니다.");
+    }
+
+    function deleteArtwork($id){
+        $artwork = DB::find("artworks", $id);
+        if(!$artwork) back("대상을 찾을 수 없습니다.");
+
+        DB::query("DELETE FROM artworks WHERE id = ?", [$id]);
+
+        go("/artworks", "삭제되었습니다.");
+    }
+
+    function deleteArtworkByAdmin($id){
+        $artwork = DB::find("artworks", $id);
+        if(!$artwork) back("대상을 찾을 수 없습니다.");
+        checkEmpty();
+        extract($_POST);
+
+        DB::query("UPDATE artworks SET rm_reason = ? WHERE id = ?", [$rm_reason, $id]);
+
+        go("/artworks", "삭제되었습니다.");
+    }
+
+    function insertScore(){
+        checkEmpty();
+        extract($_POST);
+
+        $artwork = DB::find("artworks", $aid);
+        if(!$artwork) back("대상을 찾을 수 없습니다.");
+
+        DB::query("INSERT INTO scores(uid, aid, score) VALUES (?, ?, ?)", [user()->id, $aid, $score]);
+        DB::query("UPDATE users SET score = ? WHERE id = ?", [$score * 100, $artwork->uid]);
+
+        go("/artworks/$aid");
+    }
 }

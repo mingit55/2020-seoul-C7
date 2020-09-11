@@ -139,25 +139,24 @@
                             <hr class="bg-yellow">
                             <div class="title text-yellow">알려드립니다</div>
                         </div>
-                        <a href="#" class="text-yellow">더 보기 +</a>
+                        <a href="/notices" class="text-yellow">더 보기 +</a>
                     </div>
                     <div class="mt-4">
-                        <div class="text-title"><strong>온라인 한지 공예대전</strong> 개최 안내</div>
-                        <div class="mt-3 fx-n1 text-muted">2020-06-30</div>
-                        <div class="mt-3 text-line text-ellipsis" title="Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempore magni est, saepe error atque odit. Beatae, cupiditate! Incidunt iusto consequatur, mollitia atque voluptatum aut, velit et quos doloremque, voluptate a!">Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempore magni est, saepe error atque odit. Beatae, cupiditate! Incidunt iusto consequatur, mollitia atque voluptatum aut, velit et quos doloremque, voluptate a!</div>
+                        <?php $first = isset($notices[0]) ? $notices[0]: null?>
+                        <?php if($first):?>
+                            <div onclick="location.href='/notices/<?=$first->id?>'">
+                                <div class="text-title"><strong><?=enc($first->title)?></strong></div>
+                                <div class="mt-3 fx-n1 text-muted"><?=dt($first->created_at)?></div>
+                                <div class="mt-3 text-line text-ellipsis"><?=enc($first->content)?></div>
+                            </div>
+                        <?php endif;?>
                         <div class="border-top mt-4 fx-n1">
-                            <div class="t-row py-1">
-                                <div class="cell-80 text-ellipsis text-left pr-4" title="제26회 전국한지공예대전 입상자 발표합니다.">제26회 전국한지공예대전 입상자 발표합니다.</div>
-                                <div class="cell-20 fx-n2 text-muted">2020-05-22</div>
+                            <?php foreach(array_slice($notices, 1) as $notice):?>
+                            <div class="t-row py-1" onclick="location.href='/notices/<?=$notice->id?>'">
+                                <div class="cell-70 text-ellipsis text-left pr-4"><?=enc($notice->title)?></div>
+                                <div class="cell-30 fx-n2 text-muted"><?=dt($notice->created_at)?></div>
                             </div>
-                            <div class="t-row py-1">
-                                <div class="cell-80 text-ellipsis text-left pr-4" title="제26회 전국한지공예대전 개최요강">제26회 전국한지공예대전 개최요강</div>
-                                <div class="cell-20 fx-n2 text-muted">2020-03-23</div>
-                            </div>                            
-                            <div class="t-row py-1">
-                                <div class="cell-80 text-ellipsis text-left pr-4" title="제23회 전주한지문화축제 안중걸 캐리커쳐 드로잉">제23회 전주한지문화축제 안중걸 캐리커쳐 드로잉</div>
-                                <div class="cell-20 fx-n2 text-muted">2019-05-15</div>
-                            </div>
+                            <?php endforeach;?>
                         </div>
                     </div>
                 </div>
@@ -181,44 +180,24 @@
                             <hr class="bg-gray">
                             <div class="title text-gray">공예대전 갤러리</div>
                             <div class="text-title text-white mt-4">온라인으로 함께
-                                <strong>한지공예대전</strong>                            </div>
+                                <strong>한지공예대전</strong> </div>
                         </div>
-                        <button class="btn-custom btn-custom--white">Read More +</button>
+                        <button class="btn-custom btn-custom--white" onclick="location.href='/artworks'">Read More +</button>
                     </div>
                 </div>
+                <?php foreach($artworks as $artwork):?>
                 <div class="col-lg-3 col-6 mb-4 mb-lg-0">
-                    <div class="image-box">
+                    <div class="image-box" onclick="location.href='/artworks/<?=$artwork->id?>'">
                         <div class="bg-white">
-                            <img class="fit-contain p-3 hx-200" src="/images/gallery/1.jpg" alt="갤러리 이미지" title="갤러리 이미지">
+                            <img class="fit-contain p-3 hx-200" src="/uploads/<?=$artwork->image?>" alt="갤러리 이미지" title="갤러리 이미지">
                             <div class="p-3">
-                                <div class="fx-3">포뭄과 말룸</div>
-                                <div class="fx-n1">오주희</div>
+                                <div class="fx-3"><?=enc($artwork->title)?></div>
+                                <div class="fx-n1"><?=enc($artwork->user_name)?></div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-3 col-6 mb-4 mb-lg-0">
-                    <div class="image-box">
-                        <div class="bg-white">
-                            <img class="fit-contain p-3 hx-200" src="/images/gallery/2.jpg" alt="갤러리 이미지" title="갤러리 이미지">
-                            <div class="p-3">
-                                <div class="fx-3">검독수리 사냥</div>
-                                <div class="fx-n1">범인자</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-6 mb-4 mb-lg-0">
-                    <div class="image-box">
-                        <div class="bg-white">
-                            <img class="fit-contain p-3 hx-200" src="/images/gallery/3.jpg" alt="갤러리 이미지" title="갤러리 이미지">
-                            <div class="p-3">
-                                <div class="fx-3">둥근상</div>
-                                <div class="fx-n1">전학식</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <?php endforeach;?>
             </div>
         </div>
     </div>

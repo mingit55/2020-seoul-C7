@@ -39,7 +39,7 @@ class Workspace {
             part.update();
             this.ctx.drawImage(part.canvas, part.x, part.y);
             
-            this.ctx.strokeRect(part.x, part.y, part.width, part.height); // debug
+            // this.ctx.strokeRect(part.x, part.y, part.width, part.height); // debug
         });
 
         this.ctx.drawImage(this.sliced, 0, 0);

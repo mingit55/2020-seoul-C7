@@ -18,4 +18,13 @@ class ApiController {
                                 LEFT JOIN users U ON P.uid = U.id"))
         );
     }
+
+    function getInventory(){
+        json_response(
+            DB::fetchAll("SELECT I.*, paper_name, width_size, height_size, image
+                        FROM inventory I
+                        LEFT JOIN papers P ON P.id = I.pid 
+                        WHERE I.uid = ?", [user()->id])
+        );
+    }
 }

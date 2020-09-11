@@ -5,7 +5,10 @@ use App\DB;
 
 class ViewController {
     function main(){
-        view("main");
+    $artworks = DB::fetchAll("SELECT A.*, user_name FROM artworks A LEFT JOIN users U ON U.id = A.uid WHERE rm_reason IS NULL ORDER BY id DESC LIMIT 0, 3");
+        $notices = DB::fetchAll("SELECT * FROM notices ORDER BY id DESC LIMIT 0, 4");
+
+        view("main", compact("artworks", "notices"));
     }   
 
     function intro(){
@@ -79,5 +82,72 @@ class ViewController {
         $companies = pagination($companies);
 
         view("companies", compact("companies", "rankers"));
+    }
+
+    function entry(){
+        view("entry");
+    }
+
+    function artworks(){
+        global $searches;
+        global $tags;
+        $searches = isset($_GET['searches']) && json_decode($_GET['searches']) ? json_decode($_GET['searches']) : [];
+        $tags = [];
+
+        $artworks = array_map(function($artwork){
+            global $tags;
+            $artwork->hash_tags = json_decode($artwork->hash_tags);
+            array_push($tags, ...$artwork->hash_tags);
+            return $artwork;
+        }, DB::fetchAll("SELECT DISTINCT A.*, user_name, type, IFNULL(score, 0) score
+                            FROM artworks A
+                            LEFT JOIN users U ON U.id = A.uid
+                            LEFT JOIN (SELECT ROUND(AVG(score), 1) score, aid FROM scores GROUP BY aid) S ON S.aid = A.id
+                            WHERE A.rm_reason IS NULL"));
+        $artworks = array_filter($artworks, function($artwork){
+            global $searches;
+            foreach($searches as $tag){
+                if(array_search($tag, $artwork->hash_tags) === false)
+                    return false;
+            }
+            return true;
+        });
+
+        $rankers = array_map(function($artwork){
+            $artwork->hash_tags = json_decode($artwork->hash_tags);
+            return $artwork;
+        }, DB::fetchAll("SELECT DISTINCT A.*, user_name, type, IFNULL(score, 0) score
+                            FROM artworks A
+                            LEFT JOIN users U ON U.id = A.uid
+                            LEFT JOIN (SELECT ROUND(AVG(score), 1) score, aid FROM scores GROUP BY aid) S ON S.aid = A.id
+                            WHERE A.rm_reason IS NULL AND A.created_at >= ?
+                            ORDER BY score DESC
+                            LIMIT 0, 4", [strtotime("-7 Day")]));
+
+        $myList = array_map(function($artwork){
+            $artwork->hash_tags = json_decode($artwork->hash_tags);
+            return $artwork;
+        }, DB::fetchAll("SELECT DISTINCT A.*, user_name, type, IFNULL(score, 0) score
+                            FROM artworks A
+                            LEFT JOIN users U ON U.id = A.uid
+                            LEFT JOIN (SELECT ROUND(AVG(score), 1) score, aid FROM scores GROUP BY aid) S ON S.aid = A.id
+                            WHERE A.uid = ?
+                            LIMIT 0, 4", [user()->id]));
+
+        $artworks = pagination($artworks);
+        view("artworks", compact("artworks", "rankers", "myList", "tags", "searches"));
+    }
+
+    function artwork($id){
+        $artwork = DB::fetch("SELECT A.*, IFNULL(score, 0) score, M.aid reviewed
+                                FROM artworks A
+                                LEFT JOIN (SELECT ROUND(AVG(score), 1) score, aid FROM scores GROUP BY aid) S ON S.aid = A.id
+                                LEFT JOIN (SELECT aid FROM scores WHERE uid = ?) M ON M.aid = A.id
+                                WHERE id = ?", [user() ? user()->id : '', $id]);
+        if(!$artwork || $artwork->rm_reason) back("대상을 찾을 수 없습니다.");
+        $artwork->hash_tags = json_decode($artwork->hash_tags);
+        $writer = DB::find("users", $artwork->uid);
+
+        view("artwork", compact("artwork", "writer"));
     }
 }

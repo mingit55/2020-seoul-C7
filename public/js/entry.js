@@ -64,7 +64,8 @@ class App {
         });
 
         $("[data-target='#insert-modal']").on("click", async e => {
-            let list = await this.db.getAll("inventory");
+            // let list = await this.db.getAll("inventory");
+            let list = await ( fetch("/api/inventory").then(res => res.json()) );
 
             $("#insert-modal .row").html(``);
             list.forEach(item => {
@@ -79,7 +80,7 @@ class App {
                                                             </div>
                                                             <div class="mt-2">
                                                                 <span class="fx-n2 text-muted">소지수량</span>
-                                                                <span class="ml-2 fx-n1">${item.hasCount}개</span>
+                                                                <span class="ml-2 fx-n1">${item.hasCount < 0 ? '∞' : item.hasCount}개</span>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -88,13 +89,17 @@ class App {
         });
 
         $("#insert-modal").on("click", ".item", async e => {
-            let item = await this.db.get("inventory", parseInt(e.currentTarget.dataset.id));
+            let id = e.currentTarget.dataset.id;
+            let list = await ( fetch("/api/inventory").then(res => res.json()) );
+            let item = list.find(item => item.id == id);
             item.hasCount--;
 
             if(item.hasCount == 0){
-                await this.db.delete("inventory", item.id);
+                // await this.db.delete("inventory", item.id);
+                fetch("/delete/inventory/" + id);
             } else {
-                await this.db.put("inventory", item);
+                // await this.db.put("inventory", item);
+                $.post("/update/inventory/" + id, {count: item.hasCount});
             }
 
             this.ws.pushPart({imageURL: item.image, width: item.width_size, height: item.height_size});
@@ -165,6 +170,16 @@ class App {
             let target = this.focusItem.parentElement.dataset.target;
             $("input[name='tabs']").removeAttr("checked");
             $(target).attr("checked", true);
+        });
+
+        $("#insert-form").on("submit", e => {
+            e.preventDefault();
+
+            if(this.ws.tool) 
+                this.ws.tool.unselectAll();
+
+            $("#image").val( this.ws.canvas.toDataURL("image/jpeg") );
+            $("#insert-form")[0].submit();
         });
     }
 }

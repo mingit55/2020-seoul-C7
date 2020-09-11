@@ -57,7 +57,24 @@ Router::get("/api/papers", "ApiController@getPapers");
 Router::get("/companies", "ViewController@companies");
 
 /**
- * 
+ * 출품하기
  */
+Router::get("/entry", "ViewController@entry", "login");
+
+Router::post("/update/inventory/{id}", "ActionController@updateInventory");
+Router::post("/delete/inventory/{id}", "ActionController@deleteInventory");
+Router::get("/api/inventory", "ApiController@getInventory");
+Router::post("/insert/artworks", "ActionController@insertArtwork", "user");
+
+/**
+ * 참가작품
+ */
+Router::get("/artworks", "ViewController@artworks");
+Router::get("/artworks/{id}", "ViewController@artwork");
+
+Router::post("/update/artworks/{id}", "ActionController@updateArtwork", "user");
+Router::get("/delete/artworks/{id}", "ActionController@deleteArtwork", "user");
+Router::post("/delete-admin/artworks/{id}", "ActionController@deleteArtworkByAdmin", "admin");
+Router::post("/insert/scores", "ActionController@insertScore", "user");
 
 Router::start();

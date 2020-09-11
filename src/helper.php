@@ -125,3 +125,12 @@ function enc($output){
 function dt($date){
     return date("Y년 m월 d일", strtotime($date));
 }
+
+function upload_base64($data){
+    $temp = explode(";base64,", $data);
+    $data = base64_decode($temp[1]);
+    $filename = time(). ".jpg";
+    
+    file_put_contents(UPLOAD."/$filename", $data);
+    return $filename;
+}
